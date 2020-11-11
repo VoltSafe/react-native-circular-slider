@@ -11,10 +11,25 @@ export default class ClockFace extends PureComponent {
     stroke: PropTypes.string,
   }
 
+  getTimeText = (h) => {
+    if(h == 0){
+      return ("Midnight")
+    }
+    if(h == 6){
+      return `6 am`
+    }
+    if(h == 18){
+      return `6 pm`
+    }    
+    if(h == 12){
+      return("Noon")
+    }
+  }
+
   render() {
     const { r, stroke } = this.props;
-    const faceRadius = r - 5;
-    const textRadius = r - 26;
+    const faceRadius = r - 2;
+    const textRadius = r - 20;
 
     return (
       <G>
@@ -27,7 +42,7 @@ export default class ClockFace extends PureComponent {
               <Line
                 key={i}
                 stroke={stroke}
-                strokeWidth={i % 4 === 0 ? 3 : 1}
+                strokeWidth={i % 2 === 0 ? 1 : 1}
                 x1={cos * faceRadius}
                 y1={sin * faceRadius}
                 x2={cos * (faceRadius - 7)}
@@ -38,20 +53,20 @@ export default class ClockFace extends PureComponent {
         }
       <G transform={{translate: "0, 5.5"}}>
           {
-            range(12).map((h, i) => (
+            range(24).map((h, i) => (
               <Text
                 key={i}
                 fill={stroke}
-                fontSize="16"
+                fontSize="11"
                 textAnchor="middle"
-                x={textRadius * Math.cos(2 * Math.PI / 12 * i - Math.PI / 2 + Math.PI / 6)}
-                y={textRadius * Math.sin(2 * Math.PI / 12 * i - Math.PI / 2 + Math.PI / 6)}
+                x={textRadius * Math.cos(Math.PI / 12 * i - Math.PI / 1.33  + Math.PI / 4)}
+                y={textRadius * Math.sin(Math.PI / 12 * i - Math.PI / 1.33 + Math.PI / 4)}
               >
-                {h + 1}
+                {this.getTimeText(h)}
               </Text>
             ))
           }
-        </G>
+        </G>      
       </G>
     );
   }
